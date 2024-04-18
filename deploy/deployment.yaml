@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  selector:
+    matchLabels:
+      app: test-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test-deployment
+    spec:
+      containers:
+        - name: container
+          image: registry.access.redhat.com/ubi9/ubi:9.3-1610
+          command: ["/bin/sh"]
+          args: ["-c", "while true; do date; sleep 30; done"]
+          resources:
+            limits:
+              cpu: 70m
+              memory: 150Mi
+            requests:
+              cpu: 35m
+              memory: 75Mi
+          securityContext:
+            readOnlyRootFilesystem: true
+      securityContext:
+        runAsNonRoot: true
